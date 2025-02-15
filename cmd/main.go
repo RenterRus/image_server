@@ -22,7 +22,7 @@ func init() {
 }
 
 func main() {
-
+	time.Sleep(time.Second * 10)
 	http.Handle("/img", http.HandlerFunc(imgUploader))
 
 	go func() {
@@ -47,21 +47,23 @@ func imgUploader(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 	}
 
-	images := make([]string, 0, len(files))
+	if len(files) > 0 {
+		images := make([]string, 0, len(files))
 
-	for _, v := range files {
-		images = append(images, v.Name())
+		for _, v := range files {
+			images = append(images, v.Name())
+		}
+
+		img := "./images/" + images[rand.Intn(len(images))]
+		fileBytes, err := os.ReadFile(img)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(img)
+		fmt.Println()
+
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Write(fileBytes)
 	}
-
-	img := "./images/" + images[rand.Intn(len(images))]
-	fileBytes, err := os.ReadFile(img)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(img)
-	fmt.Println()
-
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/octet-stream")
-	w.Write(fileBytes)
 }
