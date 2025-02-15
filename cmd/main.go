@@ -54,7 +54,7 @@ func imgUploader(w http.ResponseWriter, r *http.Request) {
 			images = append(images, v.Name())
 		}
 
-		img := "./images/" + images[rand.Intn(len(images))]
+		img := *path + "/" + images[rand.Intn(len(images))]
 		fileBytes, err := os.ReadFile(img)
 		if err != nil {
 			panic(err)
