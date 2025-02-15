@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-var port *int
+var addr *string
 var path *string
 
 func init() {
-	port = flag.Int("port", 8111, "set listen port. Default: 8111. Example: 8765")
+	addr = flag.String("addr", "192.168.0.100:8111", "set listen addr. Default: 192.168.0.100:8111. Example: 192.168.0.100:8765")
 	path = flag.String("path", "./images", "source directory to img")
 
 	flag.Parse()
@@ -27,11 +27,11 @@ func main() {
 
 	go func() {
 		time.Sleep(time.Millisecond * 500)
-		fmt.Println("listen port:", *port)
+		fmt.Println("listen addr:", *addr)
 		fmt.Println("path to source directory:", *path)
 	}()
 
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", *port), nil); err != nil {
+	if err := http.ListenAndServe(*addr, nil); err != nil {
 		log.Fatal(err)
 	}
 
