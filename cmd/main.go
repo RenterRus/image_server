@@ -65,6 +65,7 @@ func imgUploader(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/octet-stream")
 		w.Write(fileBytes)
+		return
 	}
 
 	w.WriteHeader(http.StatusInternalServerError)
